@@ -1,0 +1,6 @@
+{
+  "name": "Xe Ghép Hà Nam",
+  "description": "Dịch vụ đặt xe ghép, bao xe tuyến Hà Nam - Hà Nội - Nội Bài chuyên nghiệp, giá rẻ, đón trả tận nơi 24/7.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
