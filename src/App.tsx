@@ -6,7 +6,6 @@
 import { useState, useEffect } from 'react';
 import { 
   Phone, 
-  MessageCircle, 
   Car, 
   Clock, 
   MapPin, 
@@ -20,21 +19,66 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-const HOTLINE = "0824.225.225";
-const ZALO_LINK = "https://zalo.me/0824225225";
+/* ============================================================
+   CẤU HÌNH NỘI DUNG WEBSITE (DỄ DÀNG CHỈNH SỬA)
+   ============================================================ */
+const WEBSITE_CONFIG = {
+  brandName: "Xe Ghép Hà Nam",
+  hotline: "0824.225.225",
+  hotlineRaw: "0824225225",
+  zaloLink: "https://zalo.me/0824225225",
+  subTitle: "Hà Nam • Hà Nội • Nội Bài",
+  developer: "Công ty TNHH CS HMD",
+  prices: {
+    hanoi: [
+      { name: 'Phủ Lý ↔ Hà Nội', shared: '200.000 - 250.000', bao4: '500.000 - 550.000', bao7: '600.000 - 700.000' },
+      { name: 'Đồng Văn ↔ Hà Nội', shared: '200.000 - 250.000', bao4: '450.000 - 500.000', bao7: '600.000 - 700.000' },
+      { name: 'Bình Lục ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
+      { name: 'Lý Nhân ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
+      { name: 'Thanh Liêm ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
+    ],
+    noibai: [
+      { name: 'Phủ Lý ↔ Nội Bài', shared: '350.000 - 400.000', bao4: '650.000 - 750.000', bao7: '750.000 - 850.000' },
+      { name: 'Đồng Văn ↔ Nội Bài', shared: '300.000 - 350.000', bao4: '600.000 - 700.000', bao7: '700.000 - 800.000' },
+    ]
+  }
+};
+
+const ZaloIcon = ({ size = 24, className = "" }: { size?: number, className?: string }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 48 48" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    <path d="M13 12H35C37.8 12 40 14.2 40 17V30C40 32.8 37.8 35 35 35H23.6L16.9 39.6C16.1 40.1 15 39.6 15 38.6V35H13C10.2 35 8 32.8 8 30V17C8 14.2 10.2 12 13 12Z" fill="currentColor"/>
+    <path d="M15.2 28.7H23.3V26.5H18.6L23.2 20.4V18.3H15.5V20.5H19.8L15.2 26.6V28.7ZM25.3 28.7H27.7V18.3H25.3V28.7ZM29.4 28.7H31.8V22.9C31.8 21.4 32.7 20.4 34 20.4C35.2 20.4 35.9 21.2 35.9 22.6V28.7H38.3V22.1C38.3 19.7 36.9 18.2 34.7 18.2C33.4 18.2 32.4 18.7 31.8 19.6V18.4H29.4V28.7Z" fill="white"/>
+  </svg>
+);
 
 // --- Components ---
 
 const Navbar = () => (
-  <header className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+  <header className="sticky sticky-nav z-50 bg-white border-b border-slate-200 shadow-sm">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-center sm:justify-between relative">
+      
+      {/* Brand & Logo Container */}
       <div className="flex items-center gap-3 w-full sm:w-auto justify-center sm:justify-start">
-        <div className="w-12 h-12 rounded-xl bg-brand-green flex items-center justify-center text-white shrink-0">
-          <Car size={28} />
+        {/* Logo - Absolute on mobile, static on desktop */}
+        <div className="absolute left-4 sm:static w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-brand-green flex items-center justify-center text-white shrink-0 shadow-sm">
+          <Car size={26} />
         </div>
+        
+        {/* Brand Text - Centered on mobile due to justify-center parent, left-aligned on desktop */}
         <div className="text-center sm:text-left">
-          <h1 className="text-xl font-black text-slate-900 leading-tight">Xe Ghép Hà Nam</h1>
-          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Hà Nam • Hà Nội • Nội Bài</p>
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 leading-tight tracking-tight">
+            {WEBSITE_CONFIG.brandName}
+          </h1>
+          <p className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">
+            {WEBSITE_CONFIG.subTitle}
+          </p>
         </div>
       </div>
       
@@ -46,32 +90,32 @@ const Navbar = () => (
 
       <div className="flex items-center gap-3">
         <a 
-          href={`tel:${HOTLINE}`} 
+          href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} 
           className="btn-primary bg-brand-green text-white shadow-lg shadow-green-200/50 hidden sm:inline-flex"
         >
           <Phone size={18} fill="currentColor" />
           <span>Gọi ngay</span>
         </a>
         <a 
-          href={ZALO_LINK} 
+          href={WEBSITE_CONFIG.zaloLink} 
           target="_blank" 
           rel="noopener noreferrer"
           className="btn-primary bg-brand-blue text-white shadow-lg shadow-blue-200/50 hidden sm:inline-flex"
         >
-          <MessageCircle size={18} fill="currentColor" />
+          <ZaloIcon size={20} />
           <span>Zalo</span>
         </a>
       </div>
 
-      {/* Floating mobile button to keep center free for brand */}
+      {/* Mobile action button (Absolute right) */}
       <div className="sm:hidden absolute right-4 top-1/2 -translate-y-1/2">
         <a 
-          href={ZALO_LINK} 
+          href={WEBSITE_CONFIG.zaloLink} 
           target="_blank" 
           rel="noopener noreferrer"
           className="w-10 h-10 bg-brand-blue text-white rounded-xl flex items-center justify-center shadow-lg"
         >
-          <MessageCircle size={22} fill="currentColor" />
+          <ZaloIcon size={24} />
         </a>
       </div>
     </div>
@@ -108,7 +152,7 @@ const Hero = () => {
           </motion.div>
           
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] tracking-tight mb-6">
-            Xe ghép Hà Nam <br className="hidden sm:block" />
+            {WEBSITE_CONFIG.brandName} <br className="hidden sm:block" />
             <span className="text-brand-green">đi Hà Nội, Nội Bài</span>
           </h2>
           
@@ -119,7 +163,7 @@ const Hero = () => {
           <div className="bg-white p-6 rounded-2xl border-2 border-green-100 border-l-8 border-l-brand-green shadow-xl shadow-slate-200/50 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <p className="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Hotline đặt xe 24/7</p>
-              <p className="text-4xl font-black text-red-600 tracking-tight">{HOTLINE}</p>
+              <p className="text-4xl font-black text-red-600 tracking-tight">{WEBSITE_CONFIG.hotline}</p>
             </div>
             <div className="text-brand-green font-black text-lg sm:text-right">
               ⚡ Gọi là có xe ngay
@@ -127,12 +171,12 @@ const Hero = () => {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-10">
-            <a href={`tel:${HOTLINE}`} className="btn-primary bg-brand-green text-white text-lg py-4 px-8 shadow-xl shadow-green-200/60">
+            <a href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} className="btn-primary bg-brand-green text-white text-lg py-4 px-8 shadow-xl shadow-green-200/60">
               <Phone size={20} fill="currentColor" />
               Đặt xe ngay
             </a>
-            <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary bg-brand-blue text-white text-lg py-4 px-8 shadow-xl shadow-blue-200/60">
-              <MessageCircle size={20} fill="currentColor" />
+            <a href={WEBSITE_CONFIG.zaloLink} target="_blank" rel="noopener noreferrer" className="btn-primary bg-brand-blue text-white text-lg py-4 px-8 shadow-xl shadow-blue-200/60">
+              <ZaloIcon size={24} />
               Chat Zalo
             </a>
           </div>
@@ -162,7 +206,7 @@ const Hero = () => {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6 }}
                 className="w-full h-full object-cover transform scale-105"
-                alt="Xe ghép Hà Nam"
+                alt={WEBSITE_CONFIG.brandName}
               />
             </AnimatePresence>
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none" />
@@ -194,24 +238,11 @@ const Hero = () => {
 };
 
 const PriceTable = () => {
-  const routes = [
-    { name: 'Phủ Lý ↔ Hà Nội', shared: '200.000 - 250.000', bao4: '500.000 - 550.000', bao7: '600.000 - 700.000' },
-    { name: 'Đồng Văn ↔ Hà Nội', shared: '200.000 - 250.000', bao4: '450.000 - 500.000', bao7: '600.000 - 700.000' },
-    { name: 'Bình Lục ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
-    { name: 'Lý Nhân ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
-    { name: 'Thanh Liêm ↔ Hà Nội', shared: '250.000 - 300.000', bao4: '550.000 - 650.000', bao7: '700.000 - 800.000' },
-  ];
-
-  const airportRoutes = [
-    { name: 'Phủ Lý ↔ Nội Bài', shared: '350.000 - 400.000', bao4: '650.000 - 750.000', bao7: '750.000 - 850.000' },
-    { name: 'Đồng Văn ↔ Nội Bài', shared: '300.000 - 350.000', bao4: '600.000 - 700.000', bao7: '700.000 - 800.000' },
-  ];
-
-  const Table = ({ data, color }: { data: typeof routes, color: string }) => (
+  const Table = ({ data }: { data: any[] }) => (
     <div className="space-y-4">
       {/* Desktop Table View */}
       <div className="hidden md:block overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/40">
-        <table className="w-full text-left border-collapse min-w-[700px]">
+        <table className="xe-ghep-table-reset text-left border-collapse min-w-[700px]">
           <thead>
             <tr className="bg-brand-dark text-white">
               <th className="px-6 py-4 font-black">Tuyến đường</th>
@@ -230,11 +261,11 @@ const PriceTable = () => {
                 <td className="px-4 py-5 font-bold text-slate-600">{item.bao7}</td>
                 <td className="px-6 py-5">
                   <div className="flex justify-center gap-2">
-                    <a href={`tel:${HOTLINE}`} className="p-2 rounded-lg bg-green-100 text-green-700 hover:bg-green-700 hover:text-white transition-colors">
+                    <a href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} className="p-2 rounded-lg bg-green-100 text-green-700 hover:bg-green-700 hover:text-white transition-colors">
                       <Phone size={18} fill="currentColor" />
                     </a>
-                    <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-700 hover:text-white transition-colors">
-                      <MessageCircle size={18} fill="currentColor" />
+                    <a href={WEBSITE_CONFIG.zaloLink} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-blue-100 text-blue-700 hover:bg-blue-700 hover:text-white transition-colors">
+                      <ZaloIcon size={20} />
                     </a>
                   </div>
                 </td>
@@ -251,11 +282,11 @@ const PriceTable = () => {
             <div className="flex justify-between items-start mb-4">
               <h4 className="text-lg font-black text-slate-900">{item.name}</h4>
               <div className="flex gap-2">
-                <a href={`tel:${HOTLINE}`} className="w-10 h-10 rounded-xl bg-green-50 text-brand-green flex items-center justify-center shadow-sm">
+                <a href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} className="w-10 h-10 rounded-xl bg-green-50 text-brand-green flex items-center justify-center shadow-sm">
                   <Phone size={18} fill="currentColor" />
                 </a>
-                <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center shadow-sm">
-                  <MessageCircle size={18} fill="currentColor" />
+                <a href={WEBSITE_CONFIG.zaloLink} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center shadow-sm">
+                  <ZaloIcon size={20} />
                 </a>
               </div>
             </div>
@@ -295,7 +326,7 @@ const PriceTable = () => {
               <div className="w-1.5 h-8 bg-brand-green rounded-full" />
               <h3 className="text-2xl font-black text-slate-900">1. Tuyến Hà Nam ↔ Nội Thành Hà Nội</h3>
             </div>
-            <Table data={routes} color="green" />
+            <Table data={WEBSITE_CONFIG.prices.hanoi} />
           </div>
 
           <div>
@@ -303,7 +334,7 @@ const PriceTable = () => {
               <div className="w-1.5 h-8 bg-brand-blue rounded-full" />
               <h3 className="text-2xl font-black text-slate-900">2. Tuyến Hà Nam ↔ Sân Bay Nội Bài</h3>
             </div>
-            <Table data={airportRoutes} color="blue" />
+            <Table data={WEBSITE_CONFIG.prices.noibai} />
           </div>
         </div>
 
@@ -322,7 +353,7 @@ const Services = () => (
   <section id="services" className="py-20 lg:py-28 bg-brand-dark text-white rounded-[3rem] mx-4 sm:mx-8">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <p className="text-brand-green font-black uppercase tracking-widest text-sm mb-3">Tâm tâm phục vụ</p>
+        <p className="text-brand-green font-black uppercase tracking-widest text-sm mb-3">Tận tâm phục vụ</p>
         <h2 className="text-4xl font-black mb-4">Các điểm đón trả phổ biến</h2>
         <p className="text-slate-400 font-medium">Chuyên tuyến Hà Nam đi các quận nội thành Hà Nội, các bệnh viện và sân bay.</p>
       </div>
@@ -333,27 +364,36 @@ const Services = () => (
             icon: Stethoscope,
             title: "Khám bệnh Tuyến TW",
             desc: "Hỗ trợ đưa đón bệnh nhân tận sảnh các viện lớn: Bạch Mai, Việt Đức, Viện K, 108. Xe sạch sẽ, êm ái.",
-            color: "green"
+            image: "https://images.unsplash.com/photo-1510488556485-3be92636f322?auto=format&fit=crop&q=80&w=800"
           },
           {
             icon: Plane,
             title: "Đưa đón Nội Bài",
             desc: "Theo dõi sát giờ bay, đảm bảo đón trả đúng giờ. Hỗ trợ hành lý. Nhận bao xe riêng cho gia đình.",
-            color: "blue"
+            image: "https://images.unsplash.com/photo-1542401886-65d6c60db217?auto=format&fit=crop&q=80&w=800"
           },
           {
             icon: Package,
             title: "Gửi hàng hóa nhanh",
             desc: "Nhận gửi hồ sơ, thực phẩm từ Hà Nam đi Hà Nội giao hỏa tốc trong ngày với chi phí tiết kiệm nhất.",
-            color: "teal"
+            image: "https://images.unsplash.com/photo-1566576721346-d4a3b4eaad5b?auto=format&fit=crop&q=80&w=800"
           }
         ].map((item, i) => (
-          <div key={i} className="bg-slate-800/50 border border-slate-700 p-8 rounded-3xl hover:bg-slate-800 transition-colors">
-            <div className="w-14 h-14 rounded-2xl bg-slate-700 flex items-center justify-center mb-6 text-brand-green">
-              <item.icon size={32} />
+          <div key={i} className="bg-slate-800/50 border border-slate-700 rounded-3xl overflow-hidden hover:bg-slate-800 transition-colors group">
+            <div className="h-48 overflow-hidden">
+              <img 
+                src={item.image} 
+                alt={item.title} 
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+              />
             </div>
-            <h3 className="text-2xl font-black mb-4">{item.title}</h3>
-            <p className="text-slate-400 font-medium leading-relaxed">{item.desc}</p>
+            <div className="p-8">
+              <div className="w-14 h-14 rounded-2xl bg-slate-700 flex items-center justify-center mb-6 text-brand-green">
+                <item.icon size={32} />
+              </div>
+              <h3 className="text-2xl font-black mb-4">{item.title}</h3>
+              <p className="text-slate-400 font-medium leading-relaxed">{item.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -414,10 +454,10 @@ const Footer = () => (
           <div className="w-10 h-10 rounded-lg bg-brand-green flex items-center justify-center text-white">
             <Car size={24} />
           </div>
-          <span className="text-xl font-black">Xe Ghép Hà Nam</span>
+          <span className="text-xl font-black">{WEBSITE_CONFIG.brandName}</span>
         </div>
         <div className="text-slate-500 font-bold text-center md:text-right">
-          <p>© 2026 Xe Ghép Hà Nam. Dịch vụ đưa đón chuyên nghiệp.</p>
+          <p>© 2026 {WEBSITE_CONFIG.brandName}. Dịch vụ đưa đón chuyên nghiệp.</p>
           <p className="text-sm mt-1">Sẵn sàng phục vụ quý khách trên mọi nẻo đường.</p>
         </div>
       </div>
@@ -428,7 +468,7 @@ const Footer = () => (
           className="h-12 w-auto grayscale opacity-50"
         />
         <p className="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-widest text-center">
-          Website được thiết kế và phát triển bởi Công ty TNHH CS HMD
+          Website được thiết kế và phát triển bởi {WEBSITE_CONFIG.developer}
         </p>
       </div>
     </div>
@@ -438,15 +478,15 @@ const Footer = () => (
 const FloatingActions = () => (
   <div className="fixed bottom-6 right-6 z-[60] flex flex-col gap-4">
     <a 
-      href={ZALO_LINK} 
+      href={WEBSITE_CONFIG.zaloLink} 
       target="_blank" 
       rel="noopener noreferrer"
       className="w-14 h-14 bg-brand-blue text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all"
     >
-      <MessageCircle size={32} fill="currentColor" />
+      <ZaloIcon size={36} />
     </a>
     <a 
-      href={`tel:${HOTLINE}`} 
+      href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} 
       className="w-14 h-14 bg-brand-green text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all animate-bounce"
     >
       <Phone size={28} fill="currentColor" />
@@ -486,16 +526,16 @@ const BookingPopup = () => {
 
         <div className="bg-red-50 rounded-2xl p-4 mb-6 text-center border border-red-100">
           <p className="text-red-500 text-xs font-black uppercase mb-1">Hotline tư vấn</p>
-          <p className="text-3xl font-black text-red-600">{HOTLINE}</p>
+          <p className="text-3xl font-black text-red-600">{WEBSITE_CONFIG.hotline}</p>
         </div>
 
         <div className="grid gap-3">
-          <a href={`tel:${HOTLINE}`} className="btn-primary bg-brand-green text-white w-full py-4 shadow-lg shadow-green-200">
+          <a href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} className="btn-primary bg-brand-green text-white w-full py-4 shadow-lg shadow-green-200">
             <Phone size={20} fill="currentColor" />
             Gọi đặt chuyến ngay
           </a>
-          <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary bg-slate-100 text-brand-blue w-full py-4">
-            <MessageCircle size={20} fill="currentColor" />
+          <a href={WEBSITE_CONFIG.zaloLink} target="_blank" rel="noopener noreferrer" className="btn-primary bg-slate-100 text-brand-blue w-full py-4">
+            <ZaloIcon size={24} />
             Nhắn tin Zalo
           </a>
         </div>
@@ -508,7 +548,7 @@ const BookingPopup = () => {
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white xe-ghep-ha-nam-app">
       <Navbar />
       <main>
         <Hero />
@@ -529,12 +569,12 @@ export default function App() {
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                <a href={`tel:${HOTLINE}`} className="btn-primary bg-brand-green text-white text-xl py-5 px-10 shadow-2xl shadow-green-500/20">
+                <a href={`tel:${WEBSITE_CONFIG.hotlineRaw}`} className="btn-primary bg-brand-green text-white text-xl py-5 px-10 shadow-2xl shadow-green-500/20">
                   <Phone size={24} fill="currentColor" />
                   Gửi yêu cầu ngay
                 </a>
-                <a href={ZALO_LINK} target="_blank" rel="noopener noreferrer" className="btn-primary bg-brand-blue text-white text-xl py-5 px-10 shadow-2xl shadow-blue-500/20">
-                  <MessageCircle size={24} fill="currentColor" />
+                <a href={WEBSITE_CONFIG.zaloLink} target="_blank" rel="noopener noreferrer" className="btn-primary bg-brand-blue text-white text-xl py-5 px-10 shadow-2xl shadow-blue-500/20">
+                  <ZaloIcon size={28} />
                   Báo giá qua Zalo
                 </a>
               </div>

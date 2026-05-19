@@ -1,3 +1,19 @@
+/* Cấu hình linh hoạt để dễ dàng chỉnh sửa */
+:root {
+  --wp-admin-bar-height: 0px;
+}
+
+/* Tự động điều chỉnh nếu có thanh công cụ WordPress */
+body.admin-bar {
+  --wp-admin-bar-height: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  body.admin-bar {
+    --wp-admin-bar-height: 46px;
+  }
+}
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
@@ -15,6 +31,8 @@
   }
   body {
     @apply font-sans text-slate-900 antialiased bg-white;
+    /* Tránh chồng lấn với theme WP */
+    line-height: 1.5;
   }
 }
 
@@ -22,4 +40,16 @@
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all hover:-translate-y-0.5 active:scale-95;
   }
+  
+  /* Đảm bảo bảng giá không bị vỡ do theme WP */
+  .xe-ghep-table-reset {
+    all: revert;
+    width: 100%;
+    border-collapse: collapse;
+  }
+}
+
+/* Fix sticky header for WP Admin Bar */
+.sticky-nav {
+  top: var(--wp-admin-bar-height);
 }
